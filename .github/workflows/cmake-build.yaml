@@ -14,12 +14,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get install -y build-essential cmake libhdf5-dev 
+          sudo apt-get install -y build-essential cmake libhdf5-dev
 
       - name: Configure CMake
         # continue-on-error: true
         run: |
-          cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+          cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DMHD=ON
 
       - name: Build
         # continue-on-error: true
