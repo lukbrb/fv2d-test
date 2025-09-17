@@ -1,0 +1,6 @@
+Checks: >
+  -*,modernize-*,clang-analyzer-*,
+  -modernize-use-trailing-return-type,
+  -modernize-pass-by-value
+WarningsAsErrors: '*'
+

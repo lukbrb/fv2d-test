@@ -1,0 +1,27 @@
+name: Lint
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install clang-format, clang-tidy, cppcheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format clang-tidy cppcheck
+
+      - name: Run clang-format
+        run: |
+          find . -name "*.cpp" -o -name "*.hpp" | xargs clang-format --dry-run --Werror
+
+      - name: Run clang-tidy
+        run: |
+          # Exemple pour un fichier spécifique, à adapter selon ta structure
+          clang-tidy src/main.cpp --checks=-*,modernize-*,clang-analyzer-* -warnings-as-errors=*
+
+      - name: Run cppcheck
+        run: |
+          cppcheck --enable=all --inconclusive --std=c++17 src/
+
