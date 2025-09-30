@@ -1,10 +1,10 @@
-#include <iostream>
 #include <array>
+#include <iostream>
 
-#include "SimInfo.h"
-#include "Init.h"
 #include "ComputeDt.h"
 #include "IOManager.h"
+#include "Init.h"
+#include "SimInfo.h"
 #include "Update.h"
 
 using namespace fv2d;
@@ -28,16 +28,15 @@ int main(int argc, char **argv) {
     auto device_params = params.device_params;
 
     // Allocating main views
-    Array U    = Kokkos::View<real_t***>("U", device_params.Nty, device_params.Ntx, Nfields);
-    Array Q    = Kokkos::View<real_t***>("Q", device_params.Nty, device_params.Ntx, Nfields);
-
+    Array U = Kokkos::View<real_t ***>("U", device_params.Nty, device_params.Ntx, Nfields);
+    Array Q = Kokkos::View<real_t ***>("Q", device_params.Nty, device_params.Ntx, Nfields);
 
     real_t GLM_ch1; // GLM wave speed, computed only once
     // Misc vars for iteration
     real_t t = 0.0;
     int ite = 0;
     real_t next_save = 0.0;
-    
+
     // Initializing primitive variables
     InitFunctor init(params);
     UpdateFunctor update(params);
@@ -54,7 +53,7 @@ int main(int argc, char **argv) {
     }
     else
       init.init(Q);
-      GLM_ch1 = init.initGLMch(Q, params);
+    GLM_ch1 = init.initGLMch(Q, params);
     primToCons(Q, U, params);
 
     real_t dt;
@@ -63,7 +62,7 @@ int main(int argc, char **argv) {
     while (t + device_params.epsilon < params.tend) {
       bool save_needed = (t + device_params.epsilon > next_save);
 
-      dt = computeDt.computeDt(Q, (ite == 0 ? params.save_freq : next_save-t), t, next_log == 0);
+      dt = computeDt.computeDt(Q, (ite == 0 ? params.save_freq : next_save - t), t, next_log == 0);
       if (next_log == 0)
         next_log = params.log_frequency;
       else
